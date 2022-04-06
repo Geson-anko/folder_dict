@@ -79,3 +79,15 @@ def test_get_path():
     assert fd.get_path(".friends.Ben.age")
     assert fd.get_path(".friends.Ben.age.")
     assert fd.get_path("friends.Ben.age.")
+
+def test_set_path():
+    fd = FolderDict(sep="/")
+    fd.set_path("a",10)
+    fd.set_path("b/c",20)
+    fd.set_path("b/d",30)
+    fd.set_path("/e/f/g/h", 40)
+    
+    assert fd.get_path("a") == 10
+    assert fd.get_path("b/c") == 20
+    assert fd.get_path("b").get_path("d") == 30
+    assert fd.get_path("e/f/g/h/") == 40
