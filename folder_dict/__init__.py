@@ -67,4 +67,7 @@ class FolderDict:
         else:
             return data
 
-    
+    def set_path(self, path:str, value:Any) -> None:
+        """set the value at the given path."""
+        self.data[self.parse_path(path)] = value
+        
