@@ -47,3 +47,24 @@ class FolderDict:
     def path_dict(self) -> PathDict:
         """returns PathDict."""
         return self.data
+
+    def parse_path(self, path:str) -> List[str]:
+        """parsing path string and convert to list of str."""
+        path_list = path.split(self.sep)
+        
+        if path_list[0] == "":
+            path_list = path_list[1:]
+        if path_list[-1] == "":
+            path_list = path_list[:-1]
+        
+        return path_list
+
+    def get_path(self, path:str) -> Any:
+        """get subscribed object from path"""
+        data = self.data[self.parse_path(path)]
+        if isinstance(data, PathDict):
+            return FolderDict(data)
+        else:
+            return data
+
+    
