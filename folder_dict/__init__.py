@@ -70,4 +70,11 @@ class FolderDict:
     def set_path(self, path:str, value:Any) -> None:
         """set the value at the given path."""
         self.data[self.parse_path(path)] = value
+
+    def __getitem__(self, path:Union[str, Iterable[str]]) -> Union[Any, List[str]]:
+        """"""
         
+        if isinstance(path, str):
+            return self.get_path(path)
+        else:
+            return [self.get_path(p) for p in path]
