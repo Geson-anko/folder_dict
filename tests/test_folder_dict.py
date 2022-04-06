@@ -56,3 +56,10 @@ def test_property():
     assert fd.path_dict == path_dict_user
     assert isinstance(fd.path_dict, PathDict)
 
+def test_parse_path():
+    fd = FolderDict(user, sep="/")
+    assert fd.parse_path("name") == ["name"]
+    assert fd.parse_path("a/b") == ["a","b"]
+    assert fd.parse_path("a/b/c") == ["a","b","c"]
+    assert fd.parse_path("/a/b") == ["a","b"]
+    assert fd.parse_path("/a/b/c/") == ["a","b","c"]
