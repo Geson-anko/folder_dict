@@ -63,3 +63,19 @@ def test_parse_path():
     assert fd.parse_path("a/b/c") == ["a","b","c"]
     assert fd.parse_path("/a/b") == ["a","b"]
     assert fd.parse_path("/a/b/c/") == ["a","b","c"]
+
+
+def test_get_path():
+    fd = FolderDict(user,sep="/")
+    assert fd.get_path("name") == "Joe"
+    assert fd.get_path("friends/Sue/age") == 30
+    assert fd.get_path("friends/Sue/age/") == 30
+    assert fd.get_path("friends/Ben/age") == 35
+    assert fd.get_path("/friends/Ben/age") == 35
+
+    fd = FolderDict(user,sep=".")
+    assert fd.get_path("friends.Sue.age")
+    assert fd.get_path("friends.Ben.age")
+    assert fd.get_path(".friends.Ben.age")
+    assert fd.get_path(".friends.Ben.age.")
+    assert fd.get_path("friends.Ben.age.")
