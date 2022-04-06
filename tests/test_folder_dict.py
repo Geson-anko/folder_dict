@@ -91,3 +91,12 @@ def test_set_path():
     assert fd.get_path("b/c") == 20
     assert fd.get_path("b").get_path("d") == 30
     assert fd.get_path("e/f/g/h/") == 40
+
+def test___getitem__():
+    fd = FolderDict(user, sep="/")
+    
+    assert fd["name"] == "Joe"
+    assert fd["friends/Sue/age"] == 30
+    assert fd["hobbies", "age"] == [["Playing football", "Podcasts"], 22]
+    assert fd["age", "/name"] == [22, "Joe"]
+    assert fd[("age", "name")] == [22, "Joe"]
