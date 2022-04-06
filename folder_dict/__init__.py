@@ -59,6 +59,12 @@ class FolderDict:
         
         return path_list
 
-
+    def get_path(self, path:str) -> Any:
+        """get subscribed object from path"""
+        data = self.data[self.parse_path(path)]
+        if isinstance(data, PathDict):
+            return FolderDict(data)
+        else:
+            return data
 
     
