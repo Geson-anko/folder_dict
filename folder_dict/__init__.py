@@ -72,7 +72,12 @@ class FolderDict:
         self.data[self.parse_path(path)] = value
 
     def __getitem__(self, path:Union[str, Iterable[str]]) -> Union[Any, List[str]]:
-        """"""
+        """
+            Get the value at the given path.
+            multiple subscriptions are supported, at which time
+            the object of list is returned.
+            <FolderDict>[path1, path2] -> [value1, value2]
+        """
         
         if isinstance(path, str):
             return self.get_path(path)
