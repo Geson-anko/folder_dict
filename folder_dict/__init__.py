@@ -78,3 +78,16 @@ class FolderDict:
             return self.get_path(path)
         else:
             return [self.get_path(p) for p in path]
+
+    def __setitem__(self, path:Union[str, Iterable[str]], value: Union[Any, Iterable[Any]]) -> None:
+        """
+            set the value at given paths.
+            multiple reigistrations are supported.
+            <FolderDict>[path1, path2] = value1, value2
+        """
+        if isinstance(path, str):
+            return self.set_path(path, value)
+        else:
+            for (k,v) in zip(path, value):
+                self.set_path(k,v)
+        
