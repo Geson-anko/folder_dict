@@ -100,3 +100,18 @@ def test___getitem__():
     assert fd["hobbies", "age"] == [["Playing football", "Podcasts"], 22]
     assert fd["age", "/name"] == [22, "Joe"]
     assert fd[("age", "name")] == [22, "Joe"]
+
+
+def test__setitem__():
+    fd = FolderDict(sep="/")
+    fd["a"] = 10
+    fd["b/c"] = 20
+    fd["d","e/f"] = 30,40
+    fd[["b/g", "h/i/j"]] = 50,60
+    
+    assert fd["b/c"] == 20
+    assert fd["a"] == 10
+    assert fd["d"] == 30
+    assert fd["e/f"] == 40
+    assert fd["b/g"] == 50
+    assert fd["h/i/j"] == 60
