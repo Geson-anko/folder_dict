@@ -115,3 +115,23 @@ def test__setitem__():
     assert fd["e/f"] == 40
     assert fd["b/g"] == 50
     assert fd["h/i/j"] == 60
+
+def test_list_all():
+    fd = FolderDict(user, sep="/")
+    paths = fd.list_all()
+    assert "name" in paths
+    assert "age" in paths
+    assert "hobbies" in paths
+    assert "friends/Sue/age" in paths
+    assert "friends/Ben/age" in paths
+    assert not 'friends/Sue' in paths
+    assert not 'friends/Ben' in paths
+    assert not "friends" in paths
+    assert not "" in paths
+
+    fd = FolderDict(user, sep=".")
+    paths = fd.list_all()
+    assert "friends.Sue.age" in paths
+    assert not "friends/Ben/age" in paths
+    assert not 'friends.Sue' in paths
+    assert not 'friends.Ben' in paths
