@@ -95,4 +95,27 @@ class FolderDict:
         else:
             for (k,v) in zip(path, value):
                 self.set_path(k,v)
+
+    def list_all(self) -> List[str]:
+        """
+            This method returns all paths to objects 
+            contained in the FolderDict.
+        """
+        return self._list_all(self.dict)
         
+    def _list_all(self, d:dict) -> List[str]:
+        """
+            Runs internal processing of `self.list_all()`.
+            This method recursivery lists all paths.
+        """
+        keys = d.keys()
+        out = []
+        for k in keys:
+            value = d[k]
+            if not isinstance(value, dict):
+                out.append(k)
+            else:
+                v_keys = self._list_all(value)
+                out += [f"{k}{self.sep}{i}" for i in v_keys]
+        return out
+
