@@ -119,3 +119,20 @@ class FolderDict:
                 out += [f"{k}{self.sep}{i}" for i in v_keys]
         return out
 
+    def clean_path(self, path:str) -> str:
+        """
+            This method cleans the path.
+            "/a/b" -> "a/b"
+            "b.c." -> "b.c"
+        """
+        if path[0] == self.sep:
+            start = 1
+        else:
+            start = 0
+        
+        if path[-1] == self.sep:
+            end = -1
+        else:
+            end = len(path)
+        
+        return path[start:end]
