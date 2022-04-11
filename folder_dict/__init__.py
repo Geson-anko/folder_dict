@@ -140,3 +140,11 @@ class FolderDict:
             end = len(path)
         
         return path[start:end]
+
+    def list(self, pathname:str = None) -> List[str]:
+        """
+            list paths.
+        """
+        if pathname is None:
+            return self.paths
+

@@ -168,3 +168,11 @@ def test_paths():
     assert not "/sex/virtual/" in paths
     assert not "sex/virtual/" in paths
     assert "sex/virtual" in paths
+
+def test_list():
+
+    # pathname is None
+    fd = FolderDict(user,sep="/")
+    paths = fd.list()
+    assert paths == fd.paths
+    
