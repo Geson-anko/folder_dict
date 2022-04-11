@@ -170,7 +170,14 @@ class FolderDict:
 
     def direct_card(self, pathname:str) -> List[str]:
         """
-
+            The `direct_card` is a direct flight to a path that
+            begins or ends with that string.
+            If the input is `a~`, this will return the paths
+            start with `a`.
+            If the input is`~b`, this will return the paths
+            end with `b`.
+            If the input is `a~b`, this will return the paths 
+            starts with `a` and end with `b`.
         """
         pathname = self.clean_path(pathname)
         card = pathname.split(self.direct_char)
