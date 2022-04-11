@@ -168,3 +168,56 @@ def test_paths():
     assert not "/sex/virtual/" in paths
     assert not "sex/virtual/" in paths
     assert "sex/virtual" in paths
+
+def test_join():
+    fd = FolderDict(sep="/")
+    assert fd.join("a","b") == "a/b"
+    assert fd.join("a") == "a"
+    assert fd.join("a","b","c/d/") == "a/b/c/d"
+    
+    fd = FolderDict(sep=".")
+    assert fd.join("a","b") == "a.b"
+    assert fd.join("a.b.","c.d") == "a.b.c.d"
+
+
+def test_direct_card():
+    fd = FolderDict(user, sep="/")
+    
+    paths = fd.direct_card("~/age")
+    assert "friends/Sue/age" in paths
+    assert "friends/Ben/age" in paths
+    assert "age" in paths
+    assert not "name" in paths
+    assert not "hobbies" in paths
+    
+    paths = fd.direct_card("friends")
+    assert "friends/Sue/age" in paths
+    assert "friends/Ben/age" in paths
+    assert not "age" in paths
+    assert not "name" in paths
+    assert not "hobbies" in paths
+
+    paths = fd.direct_card("frie~")
+    assert "friends/Sue/age" in paths
+    assert "friends/Ben/age" in paths
+    assert not "age" in paths
+    assert not "name" in paths
+    assert not "hobbies" in paths
+
+    paths = fd.direct_card("friends/~/age")
+    assert "friends/Sue/age" in paths
+    assert "friends/Ben/age" in paths
+    assert not "age" in paths
+    assert not "name" in paths
+    assert not "hobbies" in paths
+
+    paths = fd.direct_card("name")
+    assert "name" in paths
+    assert not "friends/Sue/age" in paths
+
+def test_list():
+
+    # pathname is None
+    fd = FolderDict(user,sep="/")
+    paths = fd.list()
+    assert paths == fd.paths

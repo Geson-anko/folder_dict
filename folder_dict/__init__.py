@@ -120,7 +120,7 @@ class FolderDict:
                 out.append(k)
             else:
                 v_keys = self._list_all(value)
-                out += [f"{k}{self.sep}{i}" for i in v_keys]
+                out += [self.join(k,i) for i in v_keys]
         return out
 
     def clean_path(self, path:str) -> str:
@@ -140,3 +140,52 @@ class FolderDict:
             end = len(path)
         
         return path[start:end]
+
+    def join(self, path:str, *child_paths:Tuple[str]) -> str:
+        """Join paths at the given separator"""
+        path = self.clean_path(path)
+        for cpt in child_paths:
+            cpt = self.clean_path(cpt)
+            path = f"{path}{self.sep}{cpt}"
+        return path
+
+    direct_char:str = "~"
+    def list(self, pathname:str = None) -> List[str]:
+        """
+            list paths.
+            If pathname is None, this method returns `self.paths`.
+            If pathname contains direct char `~`, it returns the result of `self.direct_card`
+            Otherwise, it returns the path to all objects under pathname.        
+        """
+        if pathname is None:
+            return self.paths
+
+        direct_count = pathname.count(self.direct_char)
+        if direct_count == 1:
+            return self.direct_card(pathname)
+        elif direct_count > 1:
+            raise ValueError(f"pathname can contain only one of the direct expression `~`. your input: {pathname}")
+
+        value = self[pathname]
+        if isinstance(value, FolderDict):
+            return [self.join(pathname, pt)for pt in value.paths]
+
+    def direct_card(self, pathname:str) -> List[str]:
+        """
+
+        """
+        pathname = self.clean_path(pathname)
+        card = pathname.split(self.direct_char)
+        if pathname.startswith(self.direct_char):
+            starts = ""
+        else:
+            starts = card[0]
+
+        if pathname.endswith(self.direct_char):
+            ends = ""
+        else:
+            ends = card[-1]
+        
+        return [pt for pt in self.paths if pt.startswith(starts) and pt.endswith(ends)]
+
+            
