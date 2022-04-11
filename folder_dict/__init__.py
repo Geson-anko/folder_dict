@@ -120,7 +120,7 @@ class FolderDict:
                 out.append(k)
             else:
                 v_keys = self._list_all(value)
-                out += [f"{k}{self.sep}{i}" for i in v_keys]
+                out += [self.join(k,i) for i in v_keys]
         return out
 
     def clean_path(self, path:str) -> str:
@@ -141,10 +141,28 @@ class FolderDict:
         
         return path[start:end]
 
+    def join(self, path:str, *child_paths:Tuple[str]) -> str:
+        """Join paths at the given separator"""
+        path = self.clean_path(path)
+        for cpt in child_paths:
+            cpt = self.clean_path(cpt)
+            path = f"{path}{self.sep}{cpt}"
+        return path
+
+    direct_char:str = "~"
     def list(self, pathname:str = None) -> List[str]:
         """
             list paths.
+            If pathname is None, this method returns `self.paths`.
+            If pathname contains "~", it returns the result of `self.direct_card`
+            Otherwise, it returns the path to all objects under pathname.        
         """
         if pathname is None:
             return self.paths
 
+        if self.direct_char in pathname:
+            return self.direct_card(pathname)
+
+        value = self[pathname]
+        if isinstance(value, FolderDict):
+            return [self.join(pathname, pt)for pt in value.paths]

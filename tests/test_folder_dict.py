@@ -169,10 +169,19 @@ def test_paths():
     assert not "sex/virtual/" in paths
     assert "sex/virtual" in paths
 
+def test_join():
+    fd = FolderDict(sep="/")
+    assert fd.join("a","b") == "a/b"
+    assert fd.join("a") == "a"
+    assert fd.join("a","b","c/d/") == "a/b/c/d"
+    
+    fd = FolderDict(sep=".")
+    assert fd.join("a","b") == "a.b"
+    assert fd.join("a.b.","c.d") == "a.b.c.d"
+
 def test_list():
 
     # pathname is None
     fd = FolderDict(user,sep="/")
     paths = fd.list()
     assert paths == fd.paths
-    
