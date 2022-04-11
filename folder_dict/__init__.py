@@ -142,7 +142,7 @@ class FolderDict:
         path = self.clean_path(path)
         for cpt in child_paths:
             cpt = self.clean_path(cpt)
-            path = f"{path}{self.sep}{cpt}"
+            path = f"{path}{cpt}"
         return path
 
     direct_char:str = "~"
