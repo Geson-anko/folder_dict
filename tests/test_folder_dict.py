@@ -135,3 +135,15 @@ def test_list_all():
     assert not "friends/Ben/age" in paths
     assert not 'friends.Sue' in paths
     assert not 'friends.Ben' in paths
+
+def test_clean_path():
+    fd = FolderDict(sep="/")
+
+    assert fd.clean_path("/a/b") == "a/b"
+    assert fd.clean_path("/a/") == "a"
+    assert fd.clean_path("a/b/c/") == "a/b/c"
+
+    fd = FolderDict(sep=".")
+    assert fd.clean_path("a.b.") == "a.b"
+    assert fd.clean_path(".s") == "s"
+    assert fd.clean_path("s.v.f.") == "s.v.f"
