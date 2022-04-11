@@ -126,20 +126,16 @@ class FolderDict:
     def clean_path(self, path:str) -> str:
         """
             This method cleans the path.
-            "/a/b" -> "a/b"
+            "/a/b" -> "/a/b"
+            "/a/" -> "/a"
+            "a" -> "/a"
             "b.c." -> "b.c"
         """
-        if path[0] == self.sep:
-            start = 1
-        else:
-            start = 0
-        
+        if path[0] != self.sep:
+            path = f"{self.sep}{path}"
         if path[-1] == self.sep:
-            end = -1
-        else:
-            end = len(path)
-        
-        return path[start:end]
+            path = path[:-1]
+        return path
 
     def join(self, path:str, *child_paths:Tuple[str]) -> str:
         """Join paths at the given separator"""
