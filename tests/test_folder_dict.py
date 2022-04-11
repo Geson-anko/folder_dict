@@ -119,34 +119,36 @@ def test__setitem__():
 def test_list_all():
     fd = FolderDict(user, sep="/")
     paths = fd.list_all()
-    assert "name" in paths
-    assert "age" in paths
-    assert "hobbies" in paths
-    assert "friends/Sue/age" in paths
-    assert "friends/Ben/age" in paths
-    assert not 'friends/Sue' in paths
-    assert not 'friends/Ben' in paths
-    assert not "friends" in paths
-    assert not "" in paths
+    assert not "name" in paths
+    assert "/name" in paths
+    assert "/age" in paths
+    assert "/hobbies" in paths
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert not "friends/Ben/age" in paths
+    assert not '/friends/Sue' in paths
+    assert not '/friends/Ben' in paths
+    assert not "/friends" in paths
+    assert not "/" in paths
 
     fd = FolderDict(user, sep=".")
     paths = fd.list_all()
-    assert "friends.Sue.age" in paths
-    assert not "friends/Ben/age" in paths
+    assert ".friends.Sue.age" in paths
+    assert not "/friends/Ben/age" in paths
     assert not 'friends.Sue' in paths
     assert not 'friends.Ben' in paths
 
 def test_clean_path():
     fd = FolderDict(sep="/")
 
-    assert fd.clean_path("/a/b") == "a/b"
-    assert fd.clean_path("/a/") == "a"
-    assert fd.clean_path("a/b/c/") == "a/b/c"
+    assert fd.clean_path("/a/b") == "/a/b"
+    assert fd.clean_path("/a/") == "/a"
+    assert fd.clean_path("a/b/c/") == "/a/b/c"
 
     fd = FolderDict(sep=".")
-    assert fd.clean_path("a.b.") == "a.b"
-    assert fd.clean_path(".s") == "s"
-    assert fd.clean_path("s.v.f.") == "s.v.f"
+    assert fd.clean_path("a.b.") == ".a.b"
+    assert fd.clean_path(".s") == ".s"
+    assert fd.clean_path("s.v.f.") == ".s.v.f"
 
 def test_paths():
     fd = FolderDict(user,sep="/")
@@ -154,70 +156,88 @@ def test_paths():
     fd["/sex/virtual"] = "female"
     
     paths = fd.paths
-    assert "name" in paths
-    assert "age" in paths
-    assert "hobbies" in paths
-    assert "friends/Sue/age" in paths
-    assert "friends/Ben/age" in paths
-    assert not 'friends/Sue' in paths
-    assert not 'friends/Ben' in paths
-    assert not "friends" in paths
-    assert not "" in paths
-    assert "sex/real" in paths
-    assert not "sex" in paths
-    assert not "/sex/virtual/" in paths
+    assert "/name" in paths
+    assert "/age" in paths
+    assert "/hobbies" in paths
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert not '/friends/Sue' in paths
+    assert not '/friends/Ben' in paths
+    assert not "/friends" in paths
+    assert not "/" in paths
+    assert "/sex/real" in paths
+    assert not "/sex" in paths
     assert not "sex/virtual/" in paths
-    assert "sex/virtual" in paths
+    assert not "/sex/virtual/" in paths
+    assert "/sex/virtual" in paths
 
 def test_join():
     fd = FolderDict(sep="/")
-    assert fd.join("a","b") == "a/b"
-    assert fd.join("a") == "a"
-    assert fd.join("a","b","c/d/") == "a/b/c/d"
+    assert fd.join("a","b") == "/a/b"
+    assert fd.join("a") == "/a"
+    assert fd.join("a","b","c/d/") == "/a/b/c/d"
     
     fd = FolderDict(sep=".")
-    assert fd.join("a","b") == "a.b"
-    assert fd.join("a.b.","c.d") == "a.b.c.d"
+    assert fd.join("a","b") == ".a.b"
+    assert fd.join("a.b.","c.d") == ".a.b.c.d"
 
 
 def test_direct_card():
     fd = FolderDict(user, sep="/")
     
     paths = fd.direct_card("~/age")
-    assert "friends/Sue/age" in paths
-    assert "friends/Ben/age" in paths
-    assert "age" in paths
-    assert not "name" in paths
-    assert not "hobbies" in paths
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert "/age" in paths
+    assert not "/name" in paths
+    assert not "/hobbies" in paths
     
-    paths = fd.direct_card("friends")
-    assert "friends/Sue/age" in paths
-    assert "friends/Ben/age" in paths
-    assert not "age" in paths
-    assert not "name" in paths
-    assert not "hobbies" in paths
-
     paths = fd.direct_card("frie~")
-    assert "friends/Sue/age" in paths
-    assert "friends/Ben/age" in paths
-    assert not "age" in paths
-    assert not "name" in paths
-    assert not "hobbies" in paths
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert not "/age" in paths
+    assert not "/name" in paths
+    assert not "/hobbies" in paths
 
     paths = fd.direct_card("friends/~/age")
-    assert "friends/Sue/age" in paths
-    assert "friends/Ben/age" in paths
-    assert not "age" in paths
-    assert not "name" in paths
-    assert not "hobbies" in paths
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert not "/age" in paths
+    assert not "/name" in paths
+    assert not "/hobbies" in paths
 
     paths = fd.direct_card("name")
-    assert "name" in paths
-    assert not "friends/Sue/age" in paths
+    assert "/name" in paths
+    assert not "/friends/Sue/age" in paths
 
 def test_list():
 
     # pathname is None
     fd = FolderDict(user,sep="/")
+
+    # None
     paths = fd.list()
     assert paths == fd.paths
+
+    # normal 
+    paths = fd.list("friends")
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert not "/age" in paths
+    assert not "/name" in paths
+    assert not "/hobbies" in paths
+
+    # direct card
+    paths = fd.list("frie~")
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert not "/age" in paths
+    assert not "/name" in paths
+    assert not "/hobbies" in paths
+
+    paths = fd.list("~/age")
+    assert "/friends/Sue/age" in paths
+    assert "/friends/Ben/age" in paths
+    assert "/age" in paths
+    assert not "/name" in paths
+    assert not "/hobbies" in paths

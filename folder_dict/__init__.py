@@ -117,7 +117,7 @@ class FolderDict:
         for k in keys:
             value = d[k]
             if not isinstance(value, dict):
-                out.append(k)
+                out.append(self.clean_path(k))
             else:
                 v_keys = self._list_all(value)
                 out += [self.join(k,i) for i in v_keys]
@@ -126,27 +126,23 @@ class FolderDict:
     def clean_path(self, path:str) -> str:
         """
             This method cleans the path.
-            "/a/b" -> "a/b"
+            "/a/b" -> "/a/b"
+            "/a/" -> "/a"
+            "a" -> "/a"
             "b.c." -> "b.c"
         """
-        if path[0] == self.sep:
-            start = 1
-        else:
-            start = 0
-        
+        if path[0] != self.sep:
+            path = f"{self.sep}{path}"
         if path[-1] == self.sep:
-            end = -1
-        else:
-            end = len(path)
-        
-        return path[start:end]
+            path = path[:-1]
+        return path
 
     def join(self, path:str, *child_paths:Tuple[str]) -> str:
         """Join paths at the given separator"""
         path = self.clean_path(path)
         for cpt in child_paths:
             cpt = self.clean_path(cpt)
-            path = f"{path}{self.sep}{cpt}"
+            path = f"{path}{cpt}"
         return path
 
     direct_char:str = "~"
@@ -164,15 +160,24 @@ class FolderDict:
         if direct_count == 1:
             return self.direct_card(pathname)
         elif direct_count > 1:
-            raise ValueError(f"pathname can contain only one of the direct expression `~`. your input: {pathname}")
+            raise ValueError(f"pathname can contain only one of the direct expression `{self.direct_char}`. your input: {pathname}")
 
         value = self[pathname]
         if isinstance(value, FolderDict):
             return [self.join(pathname, pt)for pt in value.paths]
+        else:
+            return [self.clean_path(pathname)]
 
     def direct_card(self, pathname:str) -> List[str]:
         """
-
+            The `direct_card` is a direct flight to a path that
+            begins or ends with that string.
+            If the input is `a~`, this will return the paths
+            start with `a`.
+            If the input is`~b`, this will return the paths
+            end with `b`.
+            If the input is `a~b`, this will return the paths 
+            starts with `a` and end with `b`.
         """
         pathname = self.clean_path(pathname)
         card = pathname.split(self.direct_char)
