@@ -117,7 +117,7 @@ class FolderDict:
         for k in keys:
             value = d[k]
             if not isinstance(value, dict):
-                out.append(k)
+                out.append(self.clean_path(k))
             else:
                 v_keys = self._list_all(value)
                 out += [self.join(k,i) for i in v_keys]
@@ -160,7 +160,7 @@ class FolderDict:
         if direct_count == 1:
             return self.direct_card(pathname)
         elif direct_count > 1:
-            raise ValueError(f"pathname can contain only one of the direct expression `~`. your input: {pathname}")
+            raise ValueError(f"pathname can contain only one of the direct expression `{self.direct_char}`. your input: {pathname}")
 
         value = self[pathname]
         if isinstance(value, FolderDict):
