@@ -165,6 +165,8 @@ class FolderDict:
         value = self[pathname]
         if isinstance(value, FolderDict):
             return [self.join(pathname, pt)for pt in value.paths]
+        else:
+            return [self.clean_path(pathname)]
 
     def direct_card(self, pathname:str) -> List[str]:
         """
