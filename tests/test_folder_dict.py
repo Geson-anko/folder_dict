@@ -147,3 +147,24 @@ def test_clean_path():
     assert fd.clean_path("a.b.") == "a.b"
     assert fd.clean_path(".s") == "s"
     assert fd.clean_path("s.v.f.") == "s.v.f"
+
+def test_paths():
+    fd = FolderDict(user,sep="/")
+    fd["sex/real"] = "male"
+    fd["/sex/virtual"] = "female"
+    
+    paths = fd.paths
+    assert "name" in paths
+    assert "age" in paths
+    assert "hobbies" in paths
+    assert "friends/Sue/age" in paths
+    assert "friends/Ben/age" in paths
+    assert not 'friends/Sue' in paths
+    assert not 'friends/Ben' in paths
+    assert not "friends" in paths
+    assert not "" in paths
+    assert "sex/real" in paths
+    assert not "sex" in paths
+    assert not "/sex/virtual/" in paths
+    assert not "sex/virtual/" in paths
+    assert "sex/virtual" in paths
