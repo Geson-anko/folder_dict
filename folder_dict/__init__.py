@@ -32,6 +32,8 @@ class FolderDict:
             self.data = deepcopy(self.data)
 
         self.__sep = sep
+
+        self.paths:List[str] = self.list_all()
     
     @property
     def sep(self) -> str:
@@ -68,7 +70,9 @@ class FolderDict:
             return data
 
     def set_path(self, path:str, value:Any) -> None:
-        """set the value at the given path."""
+        """set the value at the given path and append to `self.paths`"""
+        path = self.clean_path(path)
+        self.paths.append(path)
         self.data[self.parse_path(path)] = value
 
     def __getitem__(self, path:Union[str, Iterable[str]]) -> Union[Any, List[str]]:
