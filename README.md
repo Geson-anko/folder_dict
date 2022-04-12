@@ -10,13 +10,13 @@ or clone this repository and run the following command.
 pip install -e ./
 ```
 
-import:
+Import
 ```py
 from folder_dict import FolderDict
 ```
 
 # Usage
-- import and construct  
+- Import and Construct  
     ```py
     # Empty Folder Dict
     fd = FolderDict(sep="/")
@@ -24,7 +24,7 @@ from folder_dict import FolderDict
     --> FolderDict({})
     ```
 
-- reference  
+- Subscription  
     ```py 
     user =  {
 	    "name": "Joe",
@@ -43,20 +43,21 @@ from folder_dict import FolderDict
     > fd["friend/Sue/age"]
     --> 30
 
-    > fd["friend/Ben"]
+    > fd["/friend/Ben"]
     --> FolderDict({
         "age": 30,
     })
     ```
 
-    - multiple input  
+    - Multiple inputs 
         ```py
         > fd["name", "age","friends/Ben/age"]
         --> ("Joe", 22, 35)
         ```
 
 
-- subcribe  
+- Assignment  
+    Assigns the object at the given path into the FolderDict.
     ```py
     fd = FolderDict(sep="/")
     fd["path/to/obj_name"] = 10
@@ -64,7 +65,7 @@ from folder_dict import FolderDict
     > fd["path/to/obj_name"]
     10
     ```
-    - multiple  
+    - Multiple inputs  
     ```py
     fd["a/b", "c/d"] = (0,1)
     > fd
@@ -74,46 +75,36 @@ from folder_dict import FolderDict
     })
     ```
 
-- listup  
+- list
+    Lists all paths contained in the FolderDict.
     ```py
     fd["a/b", "c/d"] = (0,1)
-    > fd.listup()
-    --> ["a/b", "c/d"]
+    > fd.list()
+    --> ["/a/b", "/c/d"]
     ```
 
-- wild card of listup()   
-    ```py
-    fd["a/b/c.d", "a/b/e.d"] = (10,20)
-    > fd.listup("a/**/*.d")
-    --> ["a/b/c.d", "a/b/e.d"] 
-    ```
-
-- "~" path  
+- Direct card `~`  
     Get paths ending with "c".
     ```py
     fd["a/b/c", "d/e/f/abc", "g/h/c", "i/j"] = (1,2,3,4)
-    > fd.listup("~c")
-    --> ["a/b/c", "d/e/f/abc", "g/h/c"]
+    > fd.list("~c")
+    --> ["/a/b/c", "/d/e/f/abc", "/g/h/c"]
     ```
     *cf.*
     ```py
-    > fd.listup("~/c")
+    > fd.list("~/c")
     --> ["a/b/c", "g/h/c"]
     ```
 
-- All combinations  
-    ```py
-    fd["a/b/c.md","x/y/z", "a/d/e/f.md"] = (0,1,2)
-    > fd.listup("a/~/*.md")
-    ["a/b/c.md", "a/d/e/f.md"]
-    ```
-
-- dict and path_dict
+- Properties
     ```py
     fd["a/b","a/c"] = (1,2)
+
+    # dict
     > fd.dict
     --> {'a': {'b': 1, 'c': 2}}
-
+    
+    # PathDict
     > fd.PathDict
     -->PathDict({
       "a": {
@@ -121,5 +112,9 @@ from folder_dict import FolderDict
         "c": 2  
       }
     })
+
+    # sep
+    > fd.sep
+    --> '/'
     ```
 
