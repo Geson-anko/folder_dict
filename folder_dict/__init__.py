@@ -7,17 +7,17 @@ from typing import *
 from copy import deepcopy
 class FolderDict:
     """
-    Folder Dict is a wrapper for PathDict that allows 
-    you to register objects in a file path-like format string.
+        Folder Dict is a wrapper for PathDict that allows 
+        you to register objects in a file path-like format string.
     """
     def __init__(
         self, data:Union[dict, PathDict, FolderDict]= {}, deep_copy:bool=False,*,sep:str="/"
         ) -> None:
         """
-        Initialize with a dict, PathDict or another FolderDict.
-		This will reference the original it,
-		so changes will also happen to them.
-		If you do not want this set deep_copy to True.
+            Initialize with a dict, PathDict or another FolderDict.
+		    This will reference the original it,
+		    so changes will also happen to them.
+		    If you do not want this set deep_copy to True.
         """
         if isinstance(data, FolderDict):
             self.data = data.path_dict
@@ -37,21 +37,21 @@ class FolderDict:
     
     @property
     def sep(self) -> str:
-        """returns the separator of path."""
+        """Returns the separator of path."""
         return self.__sep
     
     @property
     def dict(self) -> dict:
-        """returns python dict."""
+        """Returns python dict."""
         return self.data.dict
 
     @property
     def path_dict(self) -> PathDict:
-        """returns PathDict."""
+        """Returns PathDict."""
         return self.data
 
     def parse_path(self, path:str) -> List[str]:
-        """parsing path string and convert to list of str."""
+        """Converts path to the list of str not contained separator character."""
         path_list = path.split(self.sep)
         
         if path_list[0] == "":
@@ -62,7 +62,7 @@ class FolderDict:
         return path_list
 
     def get_path(self, path:str) -> Any:
-        """get subscribed object from path"""
+        """Get subscribed object from path"""
         data = self.data[self.parse_path(path)]
         if isinstance(data, PathDict):
             return FolderDict(data)
@@ -70,7 +70,7 @@ class FolderDict:
             return data
 
     def set_path(self, path:str, value:Any) -> None:
-        """set the value at the given path and append to `self.paths`"""
+        """Set the value at the given path and append to `self.paths`"""
         path = self.clean_path(path)
         self.paths.append(path)
         self.data[self.parse_path(path)] = value
@@ -90,8 +90,8 @@ class FolderDict:
 
     def __setitem__(self, path:Union[str, Iterable[str]], value: Union[Any, Iterable[Any]]) -> None:
         """
-            set the value at given paths.
-            multiple reigistrations are supported.
+            Set the value at given paths.
+            Multiple reigistrations are supported.
             <FolderDict>[path1, path2] = value1, value2
         """
         if isinstance(path, str):
@@ -160,7 +160,7 @@ class FolderDict:
         if direct_count == 1:
             return self.direct_card(pathname)
         elif direct_count > 1:
-            raise ValueError(f"pathname can contain only one of the direct expression `{self.direct_char}`. your input: {pathname}")
+            raise ValueError(f"`pathname` can contain only one of the direct expression `{self.direct_char}`. your input: {pathname}")
 
         value = self[pathname]
         if isinstance(value, FolderDict):
