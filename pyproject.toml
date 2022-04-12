@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "folder_dict"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Geson-anko <59220704+Geson-anko@users.noreply.github.com>"]
 
