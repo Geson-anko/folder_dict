@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "folder_dict"
-version = "0.1.1"
+version = "0.1.2"
 repository = "https://github.com/Geson-anko/folder_dict"
 description = "TThe versatile dict for Python!"
 authors = ["Yasuhiro Shimomura <22shimoyasu22@gmail.com>"]
