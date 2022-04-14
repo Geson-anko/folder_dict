@@ -241,3 +241,34 @@ def test_list():
     assert "/age" in paths
     assert not "/name" in paths
     assert not "/hobbies" in paths
+
+
+
+def test__repr__():
+    # empty FolderDict
+    fd = FolderDict(dict(),sep="/")
+    print(fd.data)
+    repr_str = "FolderDict(sep='/', [])"
+    assert repr(fd) == repr_str
+
+    # Normal
+    user =  {
+    "name": "Joe",
+	"age": 22,
+	"hobbies": ["Playing football", "Podcasts"],
+    "friends": {
+		"Sue": {"age": 30},
+    	"Ben": {"age": 35},
+	    }
+}
+
+    fd = FolderDict(user,sep="/")
+    repr_str = """\
+FolderDict(sep='/', [
+    /name = 'Joe',
+    /age = 22,
+    /hobbies = ['Playing football', 'Podcasts'],
+    /friends/Sue/age = 30,
+    /friends/Ben/age = 35
+])"""
+    assert repr(fd) == repr_str
