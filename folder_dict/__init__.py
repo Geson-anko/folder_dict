@@ -11,7 +11,7 @@ class FolderDict:
         you to register objects in a file path-like format string.
     """
     def __init__(
-        self, data:Union[dict, PathDict, FolderDict]= {}, deep_copy:bool=False,*,sep:str="/"
+        self, data:Union[dict, PathDict, FolderDict] = None, deep_copy:bool=False,*,sep:str="/"
         ) -> None:
         """
             Initialize with a dict, PathDict or another FolderDict.
@@ -19,6 +19,8 @@ class FolderDict:
 		    so changes will also happen to them.
 		    If you do not want this set deep_copy to True.
         """
+        if data is None:
+            data = dict()
         if isinstance(data, FolderDict):
             self.data = data.path_dict
         elif isinstance(data, PathDict):
