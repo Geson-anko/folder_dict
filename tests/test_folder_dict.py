@@ -30,9 +30,12 @@ def test_constructor():
     assert (fd.data is fd_same.data)
     fd_copy = FolderDict(fd, deep_copy=True)
     assert not (fd.data is fd_copy.data)
+
+def test_memory_overwrite():
+    fd1 = FolderDict()
+    fd2 = FolderDict()
+    assert fd1.data is not fd2.data
     
-
-
 def test_property():
     """tests properties of FolderDict."""
     # sep
