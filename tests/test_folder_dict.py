@@ -60,7 +60,7 @@ def test_property():
     assert isinstance(fd.path_dict, PathDict)
 
 def test_parse_path():
-    fd = FolderDict(user, sep="/")
+    fd = FolderDict(user, sep="/",deep_copy=True)
     assert fd.parse_path("name") == ["name"]
     assert fd.parse_path("a/b") == ["a","b"]
     assert fd.parse_path("a/b/c") == ["a","b","c"]
@@ -69,14 +69,14 @@ def test_parse_path():
 
 
 def test_get_path():
-    fd = FolderDict(user,sep="/")
+    fd = FolderDict(user,sep="/", deep_copy=True)
     assert fd.get_path("name") == "Joe"
     assert fd.get_path("friends/Sue/age") == 30
     assert fd.get_path("friends/Sue/age/") == 30
     assert fd.get_path("friends/Ben/age") == 35
     assert fd.get_path("/friends/Ben/age") == 35
 
-    fd = FolderDict(user,sep=".")
+    fd = FolderDict(user,sep=".",deep_copy=True)
     assert fd.get_path("friends.Sue.age")
     assert fd.get_path("friends.Ben.age")
     assert fd.get_path(".friends.Ben.age")
@@ -96,7 +96,7 @@ def test_set_path():
     assert fd.get_path("e/f/g/h/") == 40
 
 def test___getitem__():
-    fd = FolderDict(user, sep="/")
+    fd = FolderDict(user, sep="/", deep_copy=True)
     
     assert fd["name"] == "Joe"
     assert fd["friends/Sue/age"] == 30
@@ -154,7 +154,7 @@ def test_clean_path():
     assert fd.clean_path("s.v.f.") == ".s.v.f"
 
 def test_paths():
-    fd = FolderDict(user,sep="/")
+    fd = FolderDict(user,sep="/",deep_copy=True)
     fd["sex/real"] = "male"
     fd["/sex/virtual"] = "female"
     
@@ -216,7 +216,7 @@ def test_direct_card():
 def test_list():
 
     # pathname is None
-    fd = FolderDict(user,sep="/")
+    fd = FolderDict(user,sep="/",deep_copy=True)
 
     # None
     paths = fd.list()
@@ -249,23 +249,13 @@ def test_list():
 
 def test__repr__():
     # empty FolderDict
-    fd = FolderDict(dict(),sep="/")
+    fd = FolderDict(sep="/")
     print(fd.data)
     repr_str = "FolderDict(sep='/', [])"
     assert repr(fd) == repr_str
 
     # Normal
-    user =  {
-    "name": "Joe",
-	"age": 22,
-	"hobbies": ["Playing football", "Podcasts"],
-    "friends": {
-		"Sue": {"age": 30},
-    	"Ben": {"age": 35},
-	    }
-}
-
-    fd = FolderDict(user,sep="/")
+    fd = FolderDict(user,sep="/",deep_copy=True)
     repr_str = """\
 FolderDict(sep='/', [
     /name = 'Joe',
