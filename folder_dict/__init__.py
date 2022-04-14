@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 from path_dict import PathDict
 from typing import *
@@ -11,7 +11,7 @@ class FolderDict:
         you to register objects in a file path-like format string.
     """
     def __init__(
-        self, data:Union[dict, PathDict, FolderDict]= {}, deep_copy:bool=False,*,sep:str="/"
+        self, data:Union[dict, PathDict, FolderDict] = None, deep_copy:bool=False,*,sep:str="/"
         ) -> None:
         """
             Initialize with a dict, PathDict or another FolderDict.
@@ -19,6 +19,8 @@ class FolderDict:
 		    so changes will also happen to them.
 		    If you do not want this set deep_copy to True.
         """
+        if data is None:
+            data = dict()
         if isinstance(data, FolderDict):
             self.data = data.path_dict
         elif isinstance(data, PathDict):
@@ -193,4 +195,16 @@ class FolderDict:
         
         return [pt for pt in self.paths if pt.startswith(starts) and pt.endswith(ends)]
 
-            
+    def __repr__(self):
+        """Representation string of FolderDict."""
+        head = f"FolderDict(sep='{self.sep}', ["
+        if len(self.paths) == 0:
+            return head + "])"
+        else:
+            items = self[self.paths]
+            item_strs = [f"{p} = {repr(i)}" for p,i in zip(self.paths,items)]
+            indent = ",\n    "
+            return f"{head}\n    {indent.join(item_strs)}\n])"
+
+    def __str__(self):
+        return self.__repr__()
