@@ -193,4 +193,16 @@ class FolderDict:
         
         return [pt for pt in self.paths if pt.startswith(starts) and pt.endswith(ends)]
 
-            
+    def __repr__(self):
+        """Representation string of FolderDict."""
+        head = f"FolderDict(sep='{self.sep}', ["
+        if len(self.paths) == 0:
+            return head + "])"
+        else:
+            items = self[self.paths]
+            item_strs = [f"{p} = {repr(i)}" for p,i in zip(self.paths,items)]
+            indent = ",\n    "
+            return f"{head}\n    {indent.join(item_strs)}\n])"
+
+    def __str__(self):
+        return self.__repr__()
