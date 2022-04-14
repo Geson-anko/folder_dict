@@ -203,3 +203,6 @@ class FolderDict:
             item_strs = [f"{p} = {repr(i)}" for p,i in zip(self.paths,items)]
             indent = ",\n    "
             return f"{head}\n    {indent.join(item_strs)}\n])"
+
+    def __str__(self):
+        return self.__repr__()
